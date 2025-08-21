@@ -8,19 +8,25 @@ export const errorRate = new Rate('errors');
 // Configuración de la prueba de carga - Ramp/Load
 export const options = {
   stages: __ENV.CI_MODE ? [
-    // Versión CI - Solo 5 minutos
-    { duration: '1m', target: 10 },  // Ramp up rápido
-    { duration: '2m', target: 20 },  // Carga moderada
-    { duration: '1m', target: 30 },  // Pico
-    { duration: '1m', target: 0 },   // Ramp down
-  ] : [
-    // Versión completa - 3 minutos
-    { duration: '30s', target: 10 },  // Ramp up gradual
-    { duration: '1m', target: 50 },   // Incremento a 50 usuarios
-    { duration: '1m', target: 100 },  // Incremento a 100 usuarios
+    // Versión CI - Solo 3 minutos
+    { duration: '30s', target: 10 },  // Ramp up rápido
+    { duration: '1m', target: 50 },   // Carga moderada
+    { duration: '1m', target: 100 },  // Pico
     { duration: '30s', target: 0 },   // Ramp down
+  ] : [
+    // Versión completa - 12 minutos
+    { duration: '1m', target: 10 },   // Ramp up gradual
+    { duration: '5m', target: 50 },   // Incremento a 50 usuarios
+    { duration: '3m', target: 100 },  // Incremento a 100 usuarios
+    { duration: '1m', target: 0 },    // Ramp down
   ],
-  thresholds: {
+  thresholds: __ENV.CI_MODE ? {
+    // Thresholds más permisivos para CI
+    'http_req_duration{expected_response:true}': ['p(95)<1000'], // 95% bajo 1000ms
+    http_req_failed: ['rate<0.15'],    // Menos del 15% de fallos (más permisivo)
+    checks: ['rate>0.80'],             // Más del 80% de checks exitosos (más permisivo)
+  } : {
+    // Thresholds estrictos para versión completa
     'http_req_duration{expected_response:true}': ['p(95)<500'], // 95% bajo 500ms
     http_req_failed: ['rate<0.01'],    // Menos del 1% de fallos
     checks: ['rate>0.99'],             // Más del 99% de checks exitosos

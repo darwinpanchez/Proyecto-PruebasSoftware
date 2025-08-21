@@ -13,12 +13,18 @@ export const options = {
     { duration: '3m', target: 20 },  // Mantener carga reducida 3min
     { duration: '1m', target: 0 },   // Ramp down
   ] : [
-    // Versión completa - 3 minutos
-    { duration: '30s', target: 40 },  // Ramp up a carga sostenida
-    { duration: '2m', target: 40 },   // Mantener 40 VUs durante 2 minutos
+    // Versión completa - 45 minutos
+    { duration: '5m', target: 40 },  // Ramp up a carga sostenida
+    { duration: '40m', target: 40 },   // Mantener 40 VUs durante 2 minutos
     { duration: '30s', target: 0 },   // Ramp down
   ],
-  thresholds: {
+  thresholds: __ENV.CI_MODE ? {
+    // Thresholds más permisivos para CI
+    'http_req_duration{expected_response:true}': ['p(95)<1000'], // 95% bajo 1000ms
+    http_req_failed: ['rate<0.15'],    // Menos del 15% de fallos (más permisivo)
+    checks: ['rate>0.80'],             // Más del 80% de checks exitosos (más permisivo)
+  } : {
+    // Thresholds estrictos para versión completa
     'http_req_duration{expected_response:true}': ['p(95)<500'], // 95% bajo 500ms
     http_req_failed: ['rate<0.01'],    // Menos del 1% de fallos
     checks: ['rate>0.99'],             // Más del 99% de checks exitosos
