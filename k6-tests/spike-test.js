@@ -35,7 +35,7 @@ export const options = {
   },
 };
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'http://localhost:3000/api';
 
 // Pool amplio de usuarios para spike testing
 const SPIKE_USERS = [];

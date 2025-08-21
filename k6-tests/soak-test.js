@@ -31,7 +31,7 @@ export const options = {
   },
 };
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'http://localhost:3000/api';
 
 // Pool de usuarios para soak testing
 const SOAK_USERS = [];

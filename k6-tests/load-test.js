@@ -14,7 +14,7 @@ export const options = {
     { duration: '1m', target: 100 },  // Pico
     { duration: '30s', target: 0 },   // Ramp down
   ] : [
-    // Versión completa - 12 minutos
+    // Versión completa - 10 minutos
     { duration: '1m', target: 10 },   // Ramp up gradual
     { duration: '5m', target: 50 },   // Incremento a 50 usuarios
     { duration: '3m', target: 100 },  // Incremento a 100 usuarios
@@ -33,7 +33,7 @@ export const options = {
   },
 };
 
-const BASE_URL = 'http://localhost:4000/api';
+const BASE_URL = 'http://localhost:3000/api';
 
 // Pool de usuarios virtuales (100 usuarios como solicitado)
 const VIRTUAL_USERS = [];
